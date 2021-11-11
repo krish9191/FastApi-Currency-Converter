@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>currency converter</title>
+    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+    <meta name="viewport" content="width=device-width">
+    <script> src="/static/script.js"</script>
+</head>
+<body>
+<div class="wrapper">
+    <header>
+        <h1>Currency Converter</h1>
+    </header>
+    <form action="/convert-currency" method="post" enctype="multipart/form-data">
+        <div class="amount">
+            <label>Amount</label>
+            <input name="amount" type="text" autofocus id="amount" minlength="1" value="0" required><br><br>
+        </div>
+        <div class="date">
+            <label>Date</label>
+            <input name="date" type="date" autofocus id="date" required><br><br>
+        </div>
+        <div class="drop-list">
+            <div class="current-currency">
+                <label>Current currency</label>
+                <select name="current" id="current">
+                    <option value="eur">EUR</option>
+                    <option value="usd">USD</option>
+                    <option value="aud">AUD</option>
+                    <option value="dkk">DKK</option>
+                </select><br><br>
+            </div>
+            <div class="target-currency">
+                <label>Target currency</label>
+                <select name="target" id="target">
+                    <option value="usd">USD</option>
+                    <option value="eur">EUR</option>
+                    <option value="aud">AUD</option>
+                    <option value="dkk">DKK</option>
+                </select><br><br>
+            </div>
+            <div class="submit">
+                <input type ="submit" id="convert" value="Convert"><br><br>
+            </div>
+
+        </div>
+        <div class="converted-amount">
+            <label>Converted Amount</label>
+            <input type="text" id="converted-amount" value="{{converted_amount}}"><br><br>
+        </div>
+        <div class="exchange-rate">
+            <label>Exchange Rate</label>
+            <input type="text" id="exchange-rate" value="{{exchange_rate}}">
+        </div>
+
+
+    </form>
+
+
+</div>
+
+</body>
+</html>

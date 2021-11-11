@@ -1,54 +1,36 @@
-import math
-from typing import Optional
 import uvicorn
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, validator
+from fastapi import Request, Depends, Form
+from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 
-from utilities.currency_conversion import convert_currency, cur
+from schemas import CurrencyConvert
+from utilities.currency_conversion import convert_currency
 
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-class CurrencyConvert(BaseModel):
-    amount: Optional[float]
-    current_currency: Optional[str]
-    target_currency: str
-    in_date: Optional[str]
-
-    @validator("amount")
-    def check_amount_is_nan(cls, value):
-        if math.isnan(value):
-            raise HTTPException(status_code=400, detail="amount must be only number")
-        return value
-
-    @validator("current_currency")
-    def check_current_currency_in_currency_list(cls, value):
-        if len(value) != 0 and value.upper() not in cur.currencies:
-            raise HTTPException(
-                status_code=400,
-                detail="current currency is not define as supported currency",
-            )
-        return value
-
-    @validator("target_currency")
-    def check_target_currency_in_currency_list(cls, value):
-        if len(value) == 0 or value.upper() not in cur.currencies:
-            raise HTTPException(
-                status_code=400,
-                detail="target currency is not define as supported currency",
-            )
-        return value
+templates = Jinja2Templates(directory="templates")
 
 
-currency_converter_router = APIRouter()
+@app.get("/")
+async def read_item(request: Request):
+    return templates.TemplateResponse("currency_converter.html", {"request": request})
 
 
-@app.post("/convert-currency")
-def get_currency_conversion(c_obj: CurrencyConvert):
-    return convert_currency(
-        c_obj.amount, c_obj.current_currency, c_obj.target_currency, c_obj.in_date
-    )
+@app.post("/convert-currency", response_class=HTMLResponse, response_model=CurrencyConvert)
+def get_currency_conversion(request: Request, form_data: CurrencyConvert = Depends(CurrencyConvert),
+                            current: str = Form(...), target: str = Form(...)):
+
+    func_response = convert_currency(form_data.amount, current, target, form_data.date)
+
+    converted_amount = func_response.get("payload")["converted_amount"]
+    exchange_rate = func_response.get("payload")["exchange_rate"]
+    return templates.TemplateResponse("currency_converter.html", context={"request": request,
+                                                                          "converted_amount": converted_amount,
+                                                                          "exchange_rate": exchange_rate})
 
 
 if __name__ == '__main__':

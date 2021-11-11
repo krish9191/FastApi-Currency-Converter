@@ -14,6 +14,7 @@ cur = CurrencyConverter(
 
 
 def convert_currency(amount, current_currency, target_currency, in_date):
+
     if current_currency == "":
         current_currency = "EUR"
 
@@ -54,7 +55,7 @@ def convert_currency(amount, current_currency, target_currency, in_date):
             current_currency.upper(), target_currency.upper()
         ),
         "payload": {
-            "converted_amount": converted_amount,
-            "exchange_rate": exchange_rate,
+            "converted_amount": "{:.4f}".format(converted_amount),
+            "exchange_rate": "{:.4f}".format(exchange_rate)
         },
     }
