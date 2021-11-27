@@ -14,8 +14,6 @@ cur = CurrencyConverter(
 
 
 def convert_currency(amount, current_currency, target_currency, in_date):
-    # if len(in_date) == 0:
-    #     in_date = date.strftime(date.today(), "%Y-%m-%d")
 
     try:
         # new_date = datetime.strptime(in_date, "%Y-%m-%d").strftime("%Y-%m-%d")
@@ -33,12 +31,6 @@ def convert_currency(amount, current_currency, target_currency, in_date):
             target_currency.upper(),
             date=date.fromisoformat(in_date),
         )
-
-    except ValueError:
-        raise HTTPException(
-            status_code=400, detail="date must be in 'YYYY-MM-DD' format"
-        )
-
     except RateNotFoundError:
         raise HTTPException(
             status_code=404,
