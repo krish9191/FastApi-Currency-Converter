@@ -44,6 +44,6 @@ def convert_currency(amount, current_currency, target_currency, in_date):
         ),
         "payload": {
             "converted_amount": "{:.4f}".format(converted_amount),
-            "exchange_rate": "{:.4f}".format(exchange_rate)
+            "exchange_rate": "{:.4f}".format(exchange_rate),
         },
     }

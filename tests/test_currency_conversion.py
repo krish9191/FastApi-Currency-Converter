@@ -20,12 +20,21 @@ def create_instance_of_currency_converter():
 def test_converted_amount(create_instance_of_currency_converter):
     current_date = date.strftime(date.today(), "%Y-%m-%d")
     result = convert_currency(1, "eur", "usd", current_date)
-    assert result["payload"]["converted_amount"] == str(create_instance_of_currency_converter.convert(
-        1, "EUR", "USD", date=date.today()))
+    assert result["payload"]["converted_amount"] == str(
+        create_instance_of_currency_converter.convert(
+            1, "EUR", "USD", date=date.today()
+        )
+    )
 
 
 def test_exchange_rate(create_instance_of_currency_converter):
     current_date = date.strftime(date.today(), "%Y-%m-%d")
     result = convert_currency(1, "eur", "usd", current_date)
-    exchange_rate = str((create_instance_of_currency_converter.convert(1, "EUR", "USD", date=date.today())))
+    exchange_rate = str(
+        (
+            create_instance_of_currency_converter.convert(
+                1, "EUR", "USD", date=date.today()
+            )
+        )
+    )
     assert result["payload"]["exchange_rate"] == exchange_rate

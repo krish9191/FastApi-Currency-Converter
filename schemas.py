@@ -27,4 +27,3 @@ class CurrencyConvert(BaseModel):
         if math.isnan(value):
             raise HTTPException(status_code=400, detail="amount must be only number")
         return value
-
