@@ -1,5 +1,5 @@
 from currency_converter import CurrencyConverter, RateNotFoundError, ECB_URL
-from datetime import date, datetime
+from datetime import date
 from fastapi import HTTPException
 
 """
