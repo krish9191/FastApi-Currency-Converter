@@ -1,7 +1,5 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Python application
+name: Currency Converter
 
 on:
   push:
@@ -16,18 +14,29 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
         python-version: "3.8.10"
     - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
+      run:  pip install -r requirements.txt
+
     - name: format code with black
       uses: psf/black@stable
+
     - name: Lint with flake8
-      run: |
-        flake8 . --exclude=venv --ignore=W503,W291,E501
+      run: flake8 . --exclude=venv --ignore=W503,W291,E501
+
     - name: Test with pytest
-      run: |
-        pytest tests
+      run:  pytest tests
+
+    - name: build and push docker image
+      uses: mr-smithers-excellent/docker-build-push@v5
+      with:
+        image: krishnatiwari9191/fastapi-currency-converter
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+
