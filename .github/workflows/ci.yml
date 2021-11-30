@@ -1,5 +1,5 @@
 
-name: Currency Converter
+name: Currency-Converter
 
 on:
   push:
